@@ -31,10 +31,13 @@ try {
         var pxWidth = WIDTH/streamFrames;
         var pxHeight = HEIGHT/bufferLength;
         let xy = 0;
+        let c = 0;
+        let s = "aa";
         for (let x = 0; x < streamFrames; x++) {
           for (let y = 0; y < bufferLength; y++) {
-            let c = fft[(n+x)%streamFrames][y]
-            canvas.fillStyle = "#"+((((((0x100|c)<<8)|c)<<8)|c).toString(16).substring(1));
+            c = fft[(n+x)%streamFrames][y]|256;
+            s = (256|c).toString(16).substring(1);
+            canvas.fillStyle = "#"+s+s+s
             canvas.fillRect(x*pxWidth,y*pxHeight,pxWidth,pxHeight);
             xy++;
           }
