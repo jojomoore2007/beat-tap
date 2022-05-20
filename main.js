@@ -1,4 +1,5 @@
 var canvasElem = document.createElement("canvas");
+var errDiv = document.createElement("div");
 try {
   if (canvasElem.getContext) {
     canvasElem.style.position="absolute";
@@ -46,5 +47,6 @@ try {
     canvasElem.innerText = "Your browser does not support the canvas element and cannot run this app. Please update your browser!";
   }
 } catch (e) {
-  canvasElem.innerText = "Error:\n"+e.toString();
+  errDiv.innerText += "Error:\n"+e.toString()+"\n";
+  document.body.appendChild(errDiv);
 }
