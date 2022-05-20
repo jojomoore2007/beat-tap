@@ -12,7 +12,7 @@ try {
       var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       var analyser = audioCtx.createAnalyser();
       var source = audioCtx.createMediaStreamSource(stream);
-      analyser.fftSize = 2048;
+      analyser.fftSize = 256;
       var bufferLength = analyser.frequencyBinCount;
       var streamFrames = 64;
       var fft = [];
