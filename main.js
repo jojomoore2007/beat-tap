@@ -18,7 +18,7 @@ try {
       var streamFrames = 64;
       var fft = [];
       for (let i = 0; i < streamFrames; i++) {
-        fft.push(new Float32Array(bufferLength));
+        fft.push(new Uint8Array(bufferLength));
       }
       source.connect(analyser);
       canvas.clearRect(0,0,canvasElem.width,canvasElem.height);
@@ -29,7 +29,7 @@ try {
           canvasElem.width=WIDTH;
           canvasElem.height=HEIGHT;
         }
-        analyser.getFloatFrequencyData(fft[n]);
+        analyser.getByteFrequencyData(fft[n]);
         n=(n+1)%streamFrames;
         let pxWidth = 1+(WIDTH/streamFrames);
         let pxHeight = 1+(HEIGHT/bufferLength);
