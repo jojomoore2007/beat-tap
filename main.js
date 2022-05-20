@@ -15,7 +15,7 @@ try {
       var source = audioCtx.createMediaStreamSource(stream);
       analyser.fftSize = 4096;
       var bufferLength = analyser.frequencyBinCount;
-      var streamFrames = 64;
+      var streamFrames = 256;
       var fft = [];
       for (let i = 0; i < streamFrames; i++) {
         fft.push(new Float32Array(bufferLength));
