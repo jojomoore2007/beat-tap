@@ -60,9 +60,4 @@ class Runtime {
     } catch (e) {window.alert(e.toString());}
   }
 }
-window.onload = ()=>{
-  try {
-    window.mainClass = Runtime();
-    window.mainClass.begin();
-  } catch (e) {window.alert(e.toString());}
-}
+window.mainClass = new Runtime();
