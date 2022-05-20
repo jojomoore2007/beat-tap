@@ -17,7 +17,7 @@ try {
       var streamFrames = 64;
       var fft = [];
       for (let i = 0; i < streamFrames; i++) {
-        fft[i]=new Uint8Array(arraySize);
+        fft[i]=new Uint8Array(bufferLength);
       }
       source.connect(analyser);
       canvas.clearRect(0,0,canvasElem.width,canvasElem.height);
@@ -32,12 +32,10 @@ try {
         var pxHeight = HEIGHT/bufferLength;
         let xy = 0;
         let c = 0;
-        let s = "aa";
         for (let x = 0; x < streamFrames; x++) {
           for (let y = 0; y < bufferLength; y++) {
-            c = fft[(n+x)%streamFrames][y]|256;
-            s = (256|c).toString(16).substring(1);
-            canvas.fillStyle = "#"+s+s+s
+            c = fft[(n+x)%streamFrames][y];
+            canvas.fillStyle = "#"+(((((0x100|c)<<8)|c)<<8)|c).toString(16).substring(1);
             canvas.fillRect(x*pxWidth,y*pxHeight,pxWidth,pxHeight);
             xy++;
           }
