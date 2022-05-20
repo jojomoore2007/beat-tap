@@ -31,7 +31,6 @@ try {
         }
         analyser.getFloatFrequencyData(fft[n]);
         n=(n+1)%streamFrames;
-        var drawVisual = requestAnimationFrame(draw);
         let pxWidth = 1+(WIDTH/streamFrames);
         let pxHeight = 1+(HEIGHT/bufferLength);
         for (let x = 0; x < streamFrames; x++) {
@@ -41,6 +40,7 @@ try {
             canvas.fillRect(x*pxWidth,y*pxHeight,pxWidth,pxHeight);
           }
         }
+        var drawVisual = requestAnimationFrame(draw);
       }
       draw()
     });
