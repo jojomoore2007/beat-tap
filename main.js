@@ -1,50 +1,68 @@
-var canvasElem = document.createElement("canvas");
-var errDiv = document.createElement("div");
-try {
-  if (canvasElem.getContext) {
-    canvasElem.style.position="absolute";
-    canvasElem.style.top=0;
-    canvasElem.style.left=0;
-    canvasElem.width=window.innerWidth;
-    canvasElem.height=window.innerHeight;
-    document.body.appendChild(canvasElem);
-    var canvas = canvasElem.getContext('2d');
-    navigator.mediaDevices.getUserMedia({video: false, audio: true}).then(stream=>{
-      var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      var analyser = audioCtx.createAnalyser();
-      var source = audioCtx.createMediaStreamSource(stream);
-      analyser.fftSize = 2048;
-      var bufferLength = analyser.frequencyBinCount;
-      var streamFrames = 256;
-      var fft = [];
-      for (let i = 0; i < streamFrames; i++) {
-        fft[i]=new Uint8Array(bufferLength);
-      }
-      source.connect(analyser);
-      canvas.clearRect(0,0,canvasElem.width,canvasElem.height);
-      n=0
-      function draw() {
-        try {
-          let WIDTH = window.innerWidth, HEIGHT = window.innerHeight;
-          canvasElem.width=WIDTH;
-          canvasElem.height=HEIGHT;
-          analyser.getByteFrequencyData(fft[n]);
-          n=(n+1)%streamFrames;
-          let pxWidth = (WIDTH/streamFrames)*2;
-          let pxHeight = (HEIGHT/bufferLength)*2;
-          for (let x = 0; x < streamFrames; x++) {
-            for (let y = 0; y < bufferLength; y++) {
-              let c = fft[Math.floor((((n+x)%streamFrames)+streamFrames)%streamFrames)][y];
-              canvas.fillStyle = "#"+(((0x010101*c)|0x1000000).toString(16).substring(1));
-              canvas.fillRect(x*pxWidth,y*pxHeight,pxWidth,pxHeight);
-            }
-          }
-          var drawVisual = requestAnimationFrame(draw);
-        } catch (e) {alert(e.toString());}
-      }
-      draw()
-    });
-  } else {
-    canvasElem.innerText = "Your browser does not support the canvas element and cannot run this app. Please update your browser!";
+class Runtime {
+  constructor() {
+    this.canvasElem = window.document.createElement("canvas");
+    this.errDiv = window.document.createElement("div");
+    if (this.canvasElem.getContext) {
+      this.works = true
+      this.canvasElem.style.position="absolute";
+      this.canvasElem.style.top=0;
+      this.canvasElem.style.left=0;
+    }
+    this.colors = []
+    for (let i = 0; i < 256; i++) {
+      this.colors[i] = "#"+(((0x180|(i>>1))<<16)|(0xff^(i>>1))).toString(16).substring(1);
+    }
   }
-} catch (e) {alert(e.toString());}
+  draw() {
+    let WIDTH = window.innerWidth, HEIGHT = window.innerHeight;
+    this.canvasElem.width=WIDTH;
+    this.canvasElem.height=HEIGHT;
+    this.analyser.getByteFrequencyData(this.fft[this.n]);
+    this.n=(this.n+1)%this.frames;
+    let pxWidth = (WIDTH/this.frames)*2;
+    let pxHeight = (HEIGHT/this.bufferLength)*2;
+    for (let x = 0; x < this.frames; x++) {
+      for (let y = 0; y < this.bufferLength; y++) {
+        this.canvas.fillStyle = this.color[this.fft[(this.n+x)%this.frames][y]];
+        this.canvas.fillRect(x*pxWidth,y*pxHeight,pxWidth,pxHeight);
+      }
+    }
+    this.drawVisual = requestAnimationFrame(this.draw);
+  }
+  graph(stream) {
+    this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    this.analyser = this.audioCtx.createAnalyser();
+    this.source = this.audioCtx.createMediaStreamSource(stream);
+    this.analyser.fftSize = 2048;
+    this.bufferLength = analyser.frequencyBinCount;
+    this.frames = 256;
+    this.fft = [];
+    for (let i = 0; i < this.frames; i++) {
+      this.fft[i]=new Uint8Array(this.bufferLength);
+    }
+    this.source.connect(this.analyser);
+    this.canvas.clearRect(0,0,this.canvasElem.width,this.canvasElem.height);
+    n=0
+    function draw() {
+      try {
+        
+      } catch (e) {alert(e.toString());}
+    }
+    draw()
+  }
+  begin() {
+    try {
+      if (this.works) {
+        this.canvasElem.width=window.innerWidth;
+        this.canvasElem.height=window.innerHeight;
+        window.document.body.appendChild(this.canvasElem);
+        this.canvas = this.canvasElem.getContext('2d');
+        window.navigator.mediaDevices.getUserMedia({video: false, audio: true}).then(stream=>{
+          
+        });
+      } else {
+        canvasElem.innerText = "Your browser does not support the canvas element and cannot run this app. Please update your browser!";
+      }
+    } catch (e) {alert(e.toString());}
+  }
+}
