@@ -35,8 +35,8 @@ try {
         let pxHeight = 1+(HEIGHT/bufferLength);
         for (let x = 0; x < streamFrames; x++) {
           for (let y = 0; y < bufferLength; y++) {
-            let c = Math.floor(10**((fft[(n+x)%streamFrames][y])/10));
-            canvas.fillStyle = "#"+(((((0x100|c)<<8)|c)<<8)|c).toString(16).substring(1);
+            let c = (fft[(n+x)%streamFrames][y]-fft[(n+x-1)%streamFrames][y]);
+            canvas.fillStyle = "#"+(((((0x100|Math.max(0,c))<<8)|(Math.abs(c)>>1))<<8)|Math.max(0,-c)).toString(16).substring(1);
             canvas.fillRect(x*pxWidth,y*pxHeight,pxWidth,pxHeight);
           }
         }
