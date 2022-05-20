@@ -34,7 +34,7 @@ try {
           let pxHeight = (HEIGHT/bufferLength)*2;
           for (let x = 0; x < streamFrames; x++) {
             for (let y = 0; y < bufferLength; y++) {
-              let c = fft[(n+x)%streamFrames][y];
+              let c = fft[Math.floor((((n+x)%streamFrames)+streamFrames)%streamFrames)][y];
               canvas.fillStyle = "#"+(((0x010101*c)|0x1000000).toString(16).substring(1));
               canvas.fillRect(x*pxWidth,y*pxHeight,pxWidth,pxHeight);
             }
