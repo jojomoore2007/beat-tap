@@ -52,7 +52,7 @@ class Runtime {
         this.canvasElem.height=window.innerHeight;
         document.body.appendChild(this.canvasElem);
         this.canvas = this.canvasElem.getContext('2d');
-        window.navigator.mediaDevices.getUserMedia({video: false, audio: true}).then(this.graph);
+        window.navigator.mediaDevices.getUserMedia({video: false, audio: true}).then(this.graph.bind(this));
       } else {
         this.canvasElem.innerText = "Your browser does not support the canvas element and cannot run this app. Please update your browser!";
         document.body.appendChild(this.canvasElem);
