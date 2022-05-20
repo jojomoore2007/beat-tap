@@ -29,7 +29,8 @@ class Runtime {
     }
     this.drawVisual = requestAnimationFrame(this.draw);
   }
-  graph(stream) {
+  async graph() {
+    this.stream = window.navigator.mediaDevices.getUserMedia({video: false, audio: true})
     this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     this.analyser = this.audioCtx.createAnalyser();
     this.source = this.audioCtx.createMediaStreamSource(stream);
@@ -52,7 +53,7 @@ class Runtime {
         this.canvasElem.height=window.innerHeight;
         document.body.appendChild(this.canvasElem);
         this.canvas = this.canvasElem.getContext('2d');
-        window.navigator.mediaDevices.getUserMedia({video: false, audio: true}).then(this.graph.bind(this));
+        this.graph();
       } else {
         this.canvasElem.innerText = "Your browser does not support the canvas element and cannot run this app. Please update your browser!";
         document.body.appendChild(this.canvasElem);
