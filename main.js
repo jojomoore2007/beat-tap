@@ -14,7 +14,7 @@ try {
       var analyser = audioCtx.createAnalyser();
       var source = audioCtx.createMediaStreamSource(stream);
       analyser.fftSize = 4096;
-      var bufferLength = analyser.frequencyBinCount;
+      var bufferLength = analyser.frequencyBinCount/3;
       var streamFrames = 256;
       var fft = [];
       for (let i = 0; i < streamFrames; i++) {
@@ -32,8 +32,13 @@ try {
         analyser.getFloatFrequencyData(fft[n]);
         n=(n+1)%streamFrames;
         var drawVisual = requestAnimationFrame(draw);
-        let pxWidth = WIDTH/streamFrames;
-        let pxHeight = HEIGHT/bufferLength;
+        let pxWidth = 1+(WIDTH/streamFrames);
+        let pxHeight = 1+(HEIGHT/bufferLength);
+        for (let x = 0; x < streamFrames; x++) {
+          for (let y = 0; y < bufferLength; y++) {
+            
+          }
+        }
         for (let x = 0; x < streamFrames; x++) {
           for (let y = 0; y < bufferLength; y++) {
             let c = Math.floor(10**((fft[(n+x)%streamFrames][y])/10));
