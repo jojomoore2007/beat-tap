@@ -15,23 +15,26 @@ try {
       analyser.fftSize = 2048;
       var bufferLength = analyser.frequencyBinCount;
       var streamFrames = 64;
-      var arraySize = bufferLength*streamFrames;
-      var fft = new Uint8Array(arraySize);
-      var copyLength = arraySize-bufferLength;
+      var fft = [];
+      for (let i = 0; i < streamFrames; i++) {
+        fft[i]=new Uint8Array(arraySize);
+      }
       source.connect(analyser);
       canvas.clearRect(0,0,canvasElem.width,canvasElem.height);
+      n=0
       function draw() {
         let WIDTH = window.innerWidth, HEIGHT = window.innerHeight;
         canvasElem.width=WIDTH;
         canvasElem.height=HEIGHT;
-        fft.copyWithin(bufferLength,0,copyLength);
-        analyser.getByteFrequencyData(fft);
+        analyser.getByteFrequencyData(fft[n]);
+        n=(n+1)%streamFrames;
         var pxWidth = WIDTH/streamFrames;
         var pxHeight = HEIGHT/bufferLength;
         let xy = 0;
         for (let x = 0; x < streamFrames; x++) {
           for (let y = 0; y < bufferLength; y++) {
-            canvas.fillStyle = "#"+((((((0x100|fft[xy])<<8)|fft[xy])<<8)|fft[xy]).toString(16).substring(1));
+            let c = fft[(n+x)%streamFrames][y]
+            canvas.fillStyle = "#"+((((((0x100|c)<<8)|c)<<8)|c).toString(16).substring(1));
             canvas.fillRect(x*pxWidth,y*pxHeight,pxWidth,pxHeight);
             xy++;
           }
