@@ -30,7 +30,7 @@ class Runtime {
     this.drawVisual = requestAnimationFrame(this.draw);
   }
   async graph() {
-    this.stream = window.navigator.mediaDevices.getUserMedia({video: false, audio: true})
+    this.stream = await window.navigator.mediaDevices.getUserMedia({video: false, audio: true})
     this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     this.analyser = this.audioCtx.createAnalyser();
     this.source = this.audioCtx.createMediaStreamSource(stream);
